@@ -1,4 +1,6 @@
 package com.playerApi.dataAccess;
 
-public class PlayerDataAccess {
-}
+import com.playerApi.domain.Player;
+
+@Repository
+public interface PlayerRepository extends MongoRepository<Player, String> {}

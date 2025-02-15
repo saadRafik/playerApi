@@ -1,4 +1,4 @@
-package com.playerApi.exceptionHandlersr;
+package com.playerApi.exceptionHandlers;
 
 @ResponseStatus(HttpStatus.NOT_FOUND)
 public class PlayerNotFoundException extends RuntimeException {
