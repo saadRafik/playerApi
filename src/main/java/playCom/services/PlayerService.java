@@ -1,13 +1,14 @@
-package com.playerApi.services;
+package playCom.services;
 
-import com.playerApi.domain.PlayerDto;
-import com.playerApi.dataAccess.PlayerRepository;
-import com.playerApi.domain.Player;
-import com.playerApi.exceptionHandlers.PlayerNotFoundException;
+import playCom.dataAccess.PlayerRepository;
+import playCom.domain.Player;
+import playCom.domain.PlayerDto;
+import playCom.exceptionHandlers.PlayerNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.List;
 
@@ -17,6 +18,7 @@ import java.util.List;
 public class PlayerService {
 
     private final PlayerRepository playerRepository;
+    private final WebClient webClient = WebClient.create("http://authentification-api:8080");
 
     public PlayerDto getPlayerDTOById(String id) {
         log.info("Fetching player with ID: {}", id);
@@ -74,6 +76,16 @@ public class PlayerService {
                     log.warn("Player with ID: {} not found", id);
                     return new PlayerNotFoundException("Joueur inexistant: " + id);
                 });
+    }
+
+    public boolean validateToken(String token) {
+        String response = webClient.post()
+                .uri("/auth/validate")
+                .header("Authorization", token)
+                .retrieve()
+                .bodyToMono(String.class)
+                .block();
+        return response != null && !response.contains("Token expiré") && !response.contains("Token invalide");
     }
 
     private Player savePlayer(Player player) {

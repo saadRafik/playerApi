@@ -1,4 +1,4 @@
-package com.playerApi.exceptionHandlers;
+package playCom.exceptionHandlers;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
